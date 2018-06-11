@@ -26,6 +26,8 @@ module Dynamoid
           begins_with:  'BEGINS_WITH',
           between:      'BETWEEN',
           in:           'IN',
+          not_null:     'NOT_NULL',
+          null:         'NULL',
           contains:     'CONTAINS',
           not_contains: 'NOT_CONTAINS'
       }
@@ -632,12 +634,12 @@ module Dynamoid
         request_limit = [record_limit, scan_limit, batch_size].compact.min
         request[:limit] = request_limit if request_limit
         request[:exclusive_start_key] = exclusive_start_key if exclusive_start_key
-        
+
         if scan_hash.present?
           request[:scan_filter] = scan_hash.reduce({}) do |memo, (attr, cond)|
             memo.merge(attr.to_s => {
-              comparison_operator: FIELD_MAP[cond.keys[0]],
-              attribute_value_list: attribute_value_list(FIELD_MAP[cond.keys[0]], cond.values[0].freeze)
+              comparison_operator: FIELD_MAP[cond.is_a?(Hash) ? cond.keys[0] : cond],
+              attribute_value_list: cond.is_a?(Hash) ? attribute_value_list(FIELD_MAP[cond.keys[0]], cond.values[0].freeze) : nil
             })
           end
         end

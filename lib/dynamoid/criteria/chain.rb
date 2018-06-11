@@ -219,6 +219,10 @@ module Dynamoid #:nodoc:
           { contains: val }
         when 'not_contains'
           { not_contains: val }
+        when 'not_null'
+          :not_null
+        when 'null'
+          :null
         end
 
         return { name.to_sym => hash }
