@@ -1,19 +1,20 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
 require 'uri'
 require 'dynamoid/config/options'
 require 'dynamoid/config/backoff_strategies/constant_backoff'
 require 'dynamoid/config/backoff_strategies/exponential_backoff'
 
 module Dynamoid
-
   # Contains all the basic configuration information required for Dynamoid: both sensible defaults and required fields.
   module Config
     extend self
+
     extend Options
     include ActiveModel::Observing if defined?(ActiveModel::Observing)
 
     # All the default options.
-    option :adapter, default: 'aws_sdk_v2'
+    option :adapter, default: 'aws_sdk_v3'
     option :namespace, default: defined?(Rails) ? "dynamoid_#{Rails.application.class.parent_name}_#{Rails.env}" : 'dynamoid'
     option :access_key, default: nil
     option :secret_key, default: nil

@@ -38,16 +38,8 @@ gem 'dynamoid', '~> 2'
 ```
 ## Prerequisities
 
-Dynamoid depends on the aws-sdk, and this is tested on the current version of aws-sdk (~> 2), rails (>= 4).
+Dynamoid depends on the aws-sdk, and this is tested on the current version of aws-sdk (~> 3), rails (>= 4).
 Hence the configuration as needed for aws to work will be dealt with by aws setup.
-
-Here are the steps to setup aws-sdk.
-
-```ruby
-gem 'aws-sdk', '~>2'
-```
-
-(or) include the aws-sdk in your Gemfile.
 
 ### AWS SDK Version Compatibility
 
@@ -100,21 +92,20 @@ Then you need to initialize Dynamoid config to get it going. Put code similar to
     config.namespace = "dynamoid_app_development" # To namespace tables created by Dynamoid from other tables you might have. Set to nil to avoid namespacing.
     config.endpoint = 'http://localhost:3000' # [Optional]. If provided, it communicates with the DB listening at the endpoint. This is useful for testing with [Amazon Local DB] (http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tools.DynamoDBLocal.html).
   end
-
 ```
 
-### Ruby  & Rails Compatibility Matrix
+### Ruby & Rails Compatibility
 
-| Ruby / Active Record  | 4.0.x | 4.1.x | 4.2.x | 5.0.x |
+Dynamoid supports Ruby >= 2.3 and Rails >= 4.2.
+
+Its compatibility is tested in following way:
+
+| Ruby / Active Record  | 4.2.x | 5.0.x | 5.1.x | 5.2.x |
 |:---------------------:|:-----:|:-----:|:-----:|:-----:|
-| 2.0.0                 | ✓     | ✓     | ✓     |       |
-| 2.1.x                 | ✓     | ✓     | ✓     |       |
-| 2.2.0-2.2.1           | ✓     | ✓     | ✓     |       |
-| 2.2.2+                | ✓     | ✓     | ✓     | ✓     |
-| 2.3.x                 | ✓     | ✓     | ✓     | ✓     |
-| 2.3.x                 | ✓     | ✓     | ✓     | ✓     |
-| 2.4.x                 |       |       | ✓     | ✓     |
-| jruby-9.X             | ✓     | ✓     | ✓     | ✓     |
+| 2.3.7                 | ✓     | ✓     | ✓     | ✓     |
+| 2.4.4                 | ✓     | ✓     | ✓     | ✓     |
+| 2.5.1                 | ✓     | ✓     | ✓     | ✓     |
+| jruby-9.1.17.0        | ✓     | ✓     | ✓     | ✓     |
 
 ## Setup
 
@@ -501,8 +492,8 @@ Following operators are available: `in`, `contains`, `not_contains`:
 
 ```ruby
 Address.where('city.in' => ['London', 'Edenburg', 'Birmingham'])
-Address.where('city.contains' => [on])
-Address.where('city.not_contains' => [ing])
+Address.where('city.contains' => ['on'])
+Address.where('city.not_contains' => ['ing'])
 ```
 
 ### Consistent Reads
@@ -658,7 +649,7 @@ the table since a query against GSI then a query on base table is still likely f
 
 Listed below are all configuration options.
 
-* `adapter` - usefull only for the gem developers to switch to a new adapter. Default and the only available value is `aws_sdk_v2`
+* `adapter` - usefull only for the gem developers to switch to a new adapter. Default and the only available value is `aws_sdk_v3`
 * `namespace` - prefix for table names, default is `dynamoid_#{application_name}_#{environment}` for Rails application and `dynamoid` otherwise
 * `logger` - by default it's a `Rails.logger` in Rails application and `stdout` otherwise. You can disable logging by setting `nil` or `false` values. Set `true` value to use defaults
 * `access_key` - DynamoDb custom credentials for AWS, override global AWS credentials if they present
